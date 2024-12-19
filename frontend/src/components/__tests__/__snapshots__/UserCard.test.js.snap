@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserCard Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="user-card"
+  >
+    <img
+      alt="johndoe"
+      class="user-avatar"
+      src="http://example.com/avatar.jpg"
+    />
+    <div
+      class="user-info"
+    >
+      <h3>
+        johndoe
+      </h3>
+      <p>
+        John Doe
+      </p>
+      <a
+        class="view-profile"
+        href="/user/johndoe"
+      >
+        View Profile
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;

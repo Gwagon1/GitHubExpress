@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getUserDetails handles errors gracefully 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      {
+        "error": "Error fetching user details",
+      },
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
