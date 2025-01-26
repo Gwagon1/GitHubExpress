@@ -9,6 +9,7 @@ const UserDetailsPage = () => {
   const [repos, setRepos] = useState([]);
   const [commits, setCommits] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // State for handling errors
 
   // Fetch user details, repositories, and commits
   useEffect(() => {
@@ -30,9 +31,9 @@ const UserDetailsPage = () => {
           })
         );
         setCommits(allCommits);
-
       } catch (error) {
         console.error('Error fetching user data:', error);
+        setError('Failed to fetch user data. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -45,10 +46,14 @@ const UserDetailsPage = () => {
     return <LoadingSpinner />;
   }
 
+  if (error) {
+    return <p>{error}</p>; // Display error message if any
+  }
+
   return (
     <div>
-      <h1>{userDetails?.name}</h1>
-      
+      <h1>{userDetails?.name || 'Unknown User'}</h1>
+
       {/* Display the user's bio */}
       {userDetails?.bio && <p><strong>Bio:</strong> {userDetails.bio}</p>}
 
@@ -58,29 +63,37 @@ const UserDetailsPage = () => {
       </a>
 
       <h2>Repositories</h2>
-      <ul>
-        {repos.map((repo) => (
-          <li key={repo.name}>
-            <h3>{repo.name}</h3>
-            <h4>Commits:</h4>
-            {commits.find(commit => commit.repoName === repo.name)?.commits.length === 0 ? (
-              <p>No commits available.</p>
-            ) : (
-              <ul>
-                {commits
-                  .find(commit => commit.repoName === repo.name)
-                  ?.commits.slice(0, 5) // Show only the latest 5 commits
-                  .map((commit, index) => (
-                    <li key={index}>
-                      <p>{commit.commit.author.name}: {commit.commit.message}</p>
-                      <p>{new Date(commit.commit.author.date).toLocaleDateString()}</p>
-                    </li>
-                  ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+      {repos.length === 0 ? (
+        <p>This user has no repositories.</p>
+      ) : (
+        <ul>
+          {repos.map((repo) => (
+            <li key={repo.name}>
+              <h3>{repo.name}</h3>
+              <h4>Commits:</h4>
+              {commits.find((commit) => commit.repoName === repo.name)?.commits.length === 0 ? (
+                <p>No commits available.</p>
+              ) : (
+                <ul>
+                  {commits
+                    .find((commit) => commit.repoName === repo.name)
+                    ?.commits.slice(0, 5) // Show only the latest 5 commits
+                    .map((commit, index) => (
+                      <li key={index}>
+                        <p>
+                          {commit.commit.author.name}: {commit.commit.message}
+                        </p>
+                        <p>
+                          {new Date(commit.commit.author.date).toLocaleDateString('en-US')}
+                        </p>
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

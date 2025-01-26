@@ -1,19 +1,24 @@
 const axios = require('axios');
 
-// Fetch user details 
+const GITHUB_BASE_URL = 'https://api.github.com';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Stored token in environment variables
+
+const axiosInstance = axios.create({
+  baseURL: GITHUB_BASE_URL,
+  headers: {
+    Authorization: `Bearer ${GITHUB_TOKEN}`,
+  },
+});
+
+// Fetch detailed user information
 const getUserDetails = async (req, res) => {
   const { username } = req.params;
 
-  if (!username) {
-    return res.status(400).json({ error: 'Username is required' });
-  }
-
   try {
-    const response = await axios.get(`https://api.github.com/users/${username}`);
+    const response = await axiosInstance.get(`/users/${username}`);
     res.json(response.data);
   } catch (error) {
-    console.error('Error fetching user details:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Error fetching user details' });
+    res.status(error.response?.status || 500).json({ message: error.message });
   }
 };
 
@@ -22,24 +27,22 @@ const getUserRepos = async (req, res) => {
   const { username } = req.params;
 
   try {
-    const response = await axios.get(`https://api.github.com/users/${username}/repos`);
+    const response = await axiosInstance.get(`/users/${username}/repos`);
     res.json(response.data);
   } catch (error) {
-    console.error('Error fetching user repositories:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Error fetching user repositories' });
+    res.status(error.response?.status || 500).json({ message: error.message });
   }
 };
 
-// Fetch commits for a specific repository
+// Fetch commit history for a repository
 const getRepoCommits = async (req, res) => {
   const { username, repoName } = req.params;
 
   try {
-    const response = await axios.get(`https://api.github.com/repos/${username}/${repoName}/commits`);
+    const response = await axiosInstance.get(`/repos/${username}/${repoName}/commits`);
     res.json(response.data);
   } catch (error) {
-    console.error('Error fetching repository commits:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Error fetching repository commits' });
+    res.status(error.response?.status || 500).json({ message: error.message });
   }
 };
 

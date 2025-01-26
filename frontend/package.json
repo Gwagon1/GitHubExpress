@@ -42,12 +42,6 @@
     "@babel/preset-env": "^7.26.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
-    "axios-mock-adapter": "^2.1.0",
-    "babel-jest": "^29.7.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    }
+    "axios-mock-adapter": "^2.1.0"
   }
 }
